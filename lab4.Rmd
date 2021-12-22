@@ -26,19 +26,58 @@ get_a <- function(k) {
 }
 
 a_data <- get_a(1:150)
+
 x_data <- qnorm(a_data[1:100])
 y_data <- qnorm(a_data[101:150])
+
+hist(x_data, col = "lightblue")
+hist(y_data, col = "pink")
 ```
 
 #### Task 1
 $H_0\,: \mu_1 = \mu_2 \quad \textrm{vs} \quad H_1\,: \mu_1 \ne \mu_2$
 
+In this task we can use the two-sided z-test for two samples, because we test means of two samples with known variances.
+
+The general form of rejection region of the test $H_0\ vs\ H_1$:
+
+$C_\alpha = \{x \in \mathbb{R}^n\ |\ |z(x, y)| \geq z_{1-\alpha/2}\}$
+
+
+The corresponding test statistics
+
+$Z(X, Y) := \sqrt{\frac{mn}{m + n}} \frac{\overline{x} − \overline{y}}{\sigma}$
+
+under $H_0$ has the standard normal distribution.
+
+Rejection region of level 0.05:
+
+$C_{0.05} = \{x \in \mathbb{R}^n\ |\ |z(x, y)| \geq z_{0.975}\}$
+
 ```{r}
 z.test(x = x_data, y = y_data, mu = mean(x_data), alternative = "t", sigma.x = 1, sigma.y = 1);
 ```
-In this task we can use the two-sided z-test for two samples. This is because we test means of two samples with known variances.
-The general form of rejection region of the test $H_0\ vs\ H_1$ of level 0.05:
+
+As we can see, the p-value is greater than 0.05 (in fact, very close to 1), so we should not reject $H_0$ at this significance level.
+
+Also, we can try to use the t-test. It does not require the variance to be know, but it should be less accurate.
+
+The general form of rejection region of the test $H_0\ vs\ H_1$:
+
+$C_\alpha = \{x \in \mathbb{R}^n\ |\ |t(x, y)| \geq t^{(n+m-2)}_{1-\alpha/2}\}$
+
+The corresponding test statistics
+
+$T(X, Y) := \sqrt{\frac{mn}{m+n}} \sqrt{\frac{n+m-2}{S_{XX}+S_{YY}}} (X - Y)$
+
+under $H_0$ has the Student distribution with n + m − 2 degrees of freedom.
+
+Rejection region of level 0.05, n = 100, m = 50:
+
+$C_{0.05} = \{x \in \mathbb{R}^n\ |\ |t(x, y)| \geq t^{(148)}_{0.975}\}$
 
 ```{r}
 t.test(x = x_data, y = y_data, alternative = "t", var.equal = TRUE);
 ```
+
+As expected, confidence interval and p-value are smaller for this test, which is worse for testing the hypothesis. But the p-value is still much bigger than the significance level, so we should not reject $H_0$
