@@ -1,0 +1,39 @@
+---
+title: "R Notebook"
+output:
+  html_document:
+    df_print: paged
+---
+
+**Install and load the required packages**
+```{r}
+require(BSDA)
+library(BSDA)
+require(EnvStats)   
+library(EnvStats)
+```
+
+***Generate data***
+```{r}
+n <- 14
+set.seed(n)
+
+a_data <- c()
+
+get_a <- function(k) {
+  a <- k * log(k^2 * n + pi)
+  return (a - trunc(a))
+}
+
+a_data <- get_a(1:150)
+x_data <- qnorm(a_data)
+y_data <- qnorm(a_data[100:150])
+```
+
+#### Task 1
+$H_0\,: \mu_1 = \mu_2 \quad \textrm{vs} \quad H_1\,: \mu_1 \ne \mu_2$
+
+```{r}
+z.test(x = x_data, y = y_data, mu = mean(x_data), alternative = "t", sigma.x = 1, sigma.y = 1);
+t.test(x = x_data, y = y_data, alternative = "t", var.equal = TRUE);
+```
