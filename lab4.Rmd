@@ -26,8 +26,8 @@ get_a <- function(k) {
 }
 
 a_data <- get_a(1:150)
-x_data <- qnorm(a_data)
-y_data <- qnorm(a_data[100:150])
+x_data <- qnorm(a_data[1:100])
+y_data <- qnorm(a_data[101:150])
 ```
 
 #### Task 1
@@ -35,5 +35,10 @@ $H_0\,: \mu_1 = \mu_2 \quad \textrm{vs} \quad H_1\,: \mu_1 \ne \mu_2$
 
 ```{r}
 z.test(x = x_data, y = y_data, mu = mean(x_data), alternative = "t", sigma.x = 1, sigma.y = 1);
+```
+In this task we can use the two-sided z-test for two samples. This is because we test means of two samples with known variances.
+The general form of rejection region of the test $H_0\ vs\ H_1$ of level 0.05:
+
+```{r}
 t.test(x = x_data, y = y_data, alternative = "t", var.equal = TRUE);
 ```
