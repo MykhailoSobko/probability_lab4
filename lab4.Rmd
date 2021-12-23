@@ -34,7 +34,7 @@ hist(x_data, col = "lightblue")
 hist(y_data, col = "pink")
 ```
 
-#### Task 1
+### Problem 1
 $H_0\,: \mu_1 = \mu_2 \quad \textrm{vs} \quad H_1\,: \mu_1 \ne \mu_2$
 
 In this task we can use the two-sided z-test for two samples, because we test means of two samples with known variances.
@@ -81,3 +81,67 @@ t.test(x = x_data, y = y_data, alternative = "t", var.equal = TRUE);
 ```
 
 As expected, confidence interval and p-value are smaller for this test, which is worse for testing the hypothesis. But the p-value is still much bigger than the significance level, so we should not reject $H_0$
+
+### Problem 2
+
+$H_0: \sigma_x^2 = \sigma_y^2$ vs. $H_1 : \sigma_x^2 > \sigma_y^2$; while $\mu_x$ and $\mu_y$ are unknown
+
+To calculate that, we will use the F-Test to compare two variances by dividing them and finding the F-value: $F = \frac{S_x^2}{S_y^2}$.
+
+The more this ratio deviates from 1, the stronger evidence for unequal population variances. Also, the F test result is always a positive number (because variances are always positive).
+
+Thus, we can use the built-in function var.test, giving the x and y data, and stating the alternate hypothesis by the argument alternative = "g" ("g" states for "greater", meaning that our alternate hypothesis is that $\sigma_x^2$ is greater than $\sigma_y^2$).
+
+var.test() function returns a list containing the following results:  
+1. **statistic F**: the value of the F test statistic;  
+2. **parameters df**: degrees of freedom of the F distribution for the numerator and denominator respectively;  
+3. **p-value**: the p value of the test;  
+4. a 95 percent **confidence interval** for the ratio of the population variances;  
+5. **estimate**: the ratio of the sample variances
+
+
+```{r}
+var.test(x = x_data, y = y_data, alternative = "g")
+```
+
+We computed that the p value $p = 0.2309$, which is greater than the significance level $\alpha = 0.05$, so we should **not reject** the null hypothesis.
+
+### Problem 3
+The Kolmogorov–Smirnov method (K–S test) is goodness of fit methodused to decide if a sample comes from a population with a specific distribution. It compares the maximum distance between the experimental cumulative distribution function and the theoretical cumulative distribution function.
+
+An attractive feature of this test is that the distribution of the K-S test statistic itself does not depend on the underlying cumulative distribution function being tested. Another advantage is that it is an exact test.
+
+The Kolmogorov-Smirnov test is defined by:
+
+$H_0\,$:	The data follow a specified distribution
+
+$H_a\,$:	The data do not follow the specified distribution
+
+The Kolmogorov-Smirnov test statistic is defined as:$D = sup(t\in \mathbb{R})|\widehat{F_x}(t) - F_0(t)|$
+
+Rejection region: $C_\alpha := \{\textbf{x}\in \mathbb{R}^n |\ d \geq d^{(n)}_{1-\alpha}\}$
+
+##### 1. 
+$\{x_k \}^{100}_{k=1}$ are normally distributed (with parameters calculated from the sample)
+```{r}
+ks.test(x_data, "pnorm", mean(x_data), sd(x_data))
+```
+The p-value is larger than 0.05, therefore we conclude that the distribution of the data is not significantly different from normal distribution. In other words, we can assume the normality.
+
+##### 2.
+$\{|x_k| \}^{100}_{k=1}$ are exponentially distributed with λ = 1
+```{r}
+lambda = 1
+ks.test(abs(x_data), "pexp", lambda)
+
+```
+The p-value is smaller than 0.05, which rejects the null hypothesis at most significance levels. Therefore we conclude that the distribution of the data is different from exponential distribution with λ = 1.
+
+##### 3. 
+$\{x_k \}^{100}_{k=1}$ and $\{y_k \}^{50}_{l=1}$ have the same distributions
+
+```{r}
+ks.test(x_data, y_data ,alternative = "t")
+
+```
+The p-value is larger than 0.05, therefore we conclude that the distribution of the x_data is not significantly different distribution of y_data.
