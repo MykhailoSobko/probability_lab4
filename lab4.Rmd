@@ -1,9 +1,14 @@
 ---
-title: "R Notebook"
+title: "Lab assignment 4"
 output:
   html_document:
     df_print: paged
 ---
+
+Team members:  
+Mykhailo-Taras Sobko - problem 1  
+Anna-Alina Bondarets - problem 2  
+Solomiya Smolyar - problem 3
 
 **Install and load the required packages**
 ```{r}
